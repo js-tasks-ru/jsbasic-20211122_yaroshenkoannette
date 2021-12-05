@@ -1,6 +1,6 @@
 function highlight(table) {
 	//add class or attribute depending on value of "Status"
-	let arrOfTdWithStatus= Array.from(document.querySelectorAll('tbody > tr > td:last-child')); 
+	let arrOfTdWithStatus= Array.from(table.querySelectorAll('tbody > tr > td:last-child')); 
 	arrOfTdWithStatus.forEach(function(td){
 		if (td.getAttribute('data-available') === 'true'){
 			td.parentNode.classList.add('available');
@@ -9,7 +9,7 @@ function highlight(table) {
 		} else { td.parentNode.setAttribute('hidden', true)}
 	})
  	// add class depending on value of "Gender" & check if "Age" under 18
- 	let arrOfTd = Array.from(document.querySelectorAll('td'));
+ 	let arrOfTd = Array.from(table.querySelectorAll('tbody > tr > td'));
  	arrOfTd.forEach(function(td){
  		if(td.textContent === 'm'){
  			td.parentNode.classList.add('male');
