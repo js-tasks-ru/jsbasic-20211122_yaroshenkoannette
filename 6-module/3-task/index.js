@@ -1,10 +1,12 @@
 import createElement from '../../assets/lib/create-element.js';
-debugger
 export default class Carousel {
   constructor(slides) {
     this.slides = slides;
     this.createCarousel();
-    this.initCarousel();
+    this.currentNumberOfSlide = 0;
+    this.arrowRight = this.elem.querySelector(".carousel__arrow_right");
+    this.arrowLeft = this.elem.querySelector(".carousel__arrow_left");
+    this.showOrHideArrow();
   }
 
   createCarousel() {
@@ -32,42 +34,45 @@ export default class Carousel {
       </div>
     </div>`
       )
-      this.elem.append(component);
+      this.elem.querySelector('.carousel__inner').append(component);
+
     });
-    
-    
+
+    this.elem.addEventListener("click", this.addEvent.bind(this));
+
   }
 
-   initCarousel() {
-    let arrowRight = this.elem.querySelector(".carousel__arrow_right");
-    let arrowLeft = this.elem.querySelector(".carousel__arrow_left");
-    let slider = this.elem.querySelector(".carousel__inner");
-    let widthOfCarousel = slider.offsetWidth;
-    console.log(widthOfCarousel);
-    let step = 0;
-    arrowLeft.style.display = 'none';
-    this.elem.addEventListener("click", makeStep);
-  
-    function makeStep(event) {
-      if (event.target.closest('.carousel__arrow') == arrowRight){
-        step = step - widthOfCarousel;
-        slider.style.transform = `translateX(${step}px)`;
-      } else if (event.target.closest('.carousel__arrow') == arrowLeft){
-        step = step + widthOfCarousel;
-        slider.style.transform = `translateX(${step}px)`;
-      }
-      hideOrShowArrow();
+
+  addEvent(event) {
+    const slider = this.elem.querySelector(".carousel__inner");
+
+    if (event.target.closest(".carousel__button")) {
+      let id = event.target.closest("[data-id]").dataset.id;
+      this.elem.dispatchEvent(
+        new CustomEvent("product-add", {
+          detail: id,
+          bubbles: true,
+        })
+      );
+    } else if (event.target.closest('.carousel__arrow') == this.arrowRight) {
+      this.currentNumberOfSlide++;
+    } else if (event.target.closest('.carousel__arrow') == this.arrowLeft) {
+      this.currentNumberOfSlide--;
     }
-  
-    function hideOrShowArrow() {
-      if (step === - widthOfCarousel * 3) {
-        arrowRight.style.display = 'none';
-      } else if (step === 0) {
-        arrowLeft.style.display = 'none';
-      } else {
-        arrowLeft.style.display = '';
-        arrowRight.style.display = '';
-      }
+
+    slider.style.transform = `translateX(${-this.currentNumberOfSlide * slider.offsetWidth}px)`;
+    this.showOrHideArrow();
+  }
+
+
+  showOrHideArrow() {
+    if (this.currentNumberOfSlide === this.slides.length - 1) {
+      this.arrowRight.style.display = 'none';
+    } else if (this.currentNumberOfSlide === 0) {
+      this.arrowLeft.style.display = 'none';
+    } else {
+      this.arrowLeft.style.display = '';
+      this.arrowRight.style.display = '';
     }
-  }  
-}
+  }
+}   
