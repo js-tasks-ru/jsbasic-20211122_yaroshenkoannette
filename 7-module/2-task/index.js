@@ -3,7 +3,7 @@ import createElement from '../../assets/lib/create-element.js';
 export default class Modal {
   constructor() {
     this.createModal();
-    document.addEventListener('keydown', this.escapeModal);
+
   }
 
   createModal() {
@@ -23,22 +23,20 @@ export default class Modal {
       </div>
     </div>`);
 
-    this.modalWindow.querySelector('.modal__close').addEventListener('click', this.close);
-  }
+    this.escapeModal = (event) => {
+      if (event.code !== "Escape") return;
+      console.log('hello');
+      this.close();
+    }
 
-
-  escapeModal(event) {
-    if (event.code !== "Escape") return;
-    document.removeEventListener('keydown', this.escapeModal);
-    console.log('hello');
-    this.close();
+    this.modalWindow.querySelector('.modal__close').addEventListener('click', this.close.bind(this));
+    document.addEventListener('keydown', this.escapeModal);
   }
 
   open() {
     document.body.classList.add('is-modal-open');
     document.body.append(this.modalWindow);
   }
-
 
   setTitle(modalTitle) {
     this.modalWindow.querySelector('.modal__title').textContent = modalTitle;
