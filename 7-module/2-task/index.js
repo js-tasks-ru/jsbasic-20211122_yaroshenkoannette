@@ -25,7 +25,6 @@ export default class Modal {
 
     this.escapeModal = (event) => {
       if (event.code !== "Escape") return;
-      console.log('hello');
       this.close();
     }
 
@@ -48,7 +47,6 @@ export default class Modal {
 
   close() {
     document.removeEventListener('keydown', this.escapeModal);
-    console.log(document.querySelector('.modal'));
     this.modalWindow.remove();
     document.body.classList.remove('is-modal-open');
   }
